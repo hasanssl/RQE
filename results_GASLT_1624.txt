@@ -1,0 +1,352 @@
+name: sign_experiment
+data:
+    data_path: ./data/pht/data/
+    version: phoenix_2014_trans
+    sgn: sign
+    txt: text
+    gls: gloss
+    train: phoenix14t.pami0.train
+    dev: phoenix14t.pami0.dev
+    test: phoenix14t.pami0.test
+    feature_size: 1624
+    level: bpe
+    sp_model_path: ./data/pht/bpe/de.wiki.bpe.vs25000.model
+    txt_lowercase: true
+    max_sent_length: 400
+    random_train_subset: -1
+    random_dev_subset: -1
+testing:
+    recognition_beam_sizes:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+    translation_beam_sizes:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+    translation_beam_alphas:
+        - -1
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+training:
+    reset_best_ckpt: false
+    reset_scheduler: false
+    reset_optimizer: false
+    random_seed: 42
+    model_dir: "./results/pht"
+    recognition_loss_weight: 0.0
+    translation_loss_weight: 1.0
+    eval_metric: bleu
+    optimizer: adam
+    learning_rate: 0.0005
+    batch_size: 32
+    num_valid_log: 5
+    epochs: 5000000
+    early_stopping_metric: eval_metric
+    batch_type: sentence
+    translation_normalization: batch
+    eval_recognition_beam_size: 1
+    eval_translation_beam_size: 10
+    eval_translation_beam_alpha: -1
+    overwrite: true
+    shuffle: true
+    use_cuda: true
+    translation_max_output_length: 40
+    keep_last_ckpts: 1
+    batch_multiplier: 1
+    logging_freq: 100
+    validation_freq: 100
+    betas:
+        - 0.9
+        - 0.998
+    scheduling: plateau
+    learning_rate_min: 1.0e-07
+    weight_decay: 0.001
+    patience: 9
+    decrease_factor: 0.5
+    label_smoothing: 0.4
+    early_stop: false
+model:
+    initializer: xavier
+    bias_initializer: zeros
+    init_gain: 1.0
+    embed_initializer: xavier
+    embed_init_gain: 1.0
+    tied_softmax: false
+    word_vectors: ./data/pht/bpe/de.wiki.bpe.vs25000.d300.w2v.txt
+    sim_name_to_video_id_json: ./data/pht/sim/name_to_video_id.json
+    sim_video_cos_sim: ./data/pht/sim/cos_sim.pkl
+    max_query_embedding: 100
+    sim_loss_weight: 10
+    sentence_embedding_mod: mean
+    encoder:
+        type: deformable_transformer
+        attentions_type: local
+        num_layers: 3
+        num_heads: 8
+        num_keys:
+            - 7
+            - 7
+            - 9
+        embeddings:
+            embedding_dim: 512
+            scale: false
+            dropout: 0.1
+            norm_type: batch
+            activation_type: softsign
+        hidden_size: 512
+        ff_size: 2048
+        dropout: 0.5
+        query_nb: 3
+        query_type: not
+    decoder:
+        type: transformer
+        num_layers: 3
+        num_heads: 8
+        embeddings:
+            embedding_dim: 300
+            scale: false
+            dropout: 0.1
+            norm_type: batch
+            activation_type: softsign
+        hidden_size: 512
+        ff_size: 2048
+        dropout: 0.5
+results
+    2024-03-24 16:50:20,615 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 1 and Alpha: -1
+            BLEU-4 13.63    (BLEU-1: 36.76, BLEU-2: 23.98,  BLEU-3: 17.43,  BLEU-4: 13.63)
+            CHRF 35.96      ROUGE 37.73
+    2024-03-24 16:50:20,616 ------------------------------------------------------------
+    2024-03-24 16:50:43,092 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 2 and Alpha: -1
+            BLEU-4 14.31    (BLEU-1: 36.80, BLEU-2: 24.52,  BLEU-3: 18.09,  BLEU-4: 14.31)
+            CHRF 36.27      ROUGE 38.20
+    2024-03-24 16:50:43,093 ------------------------------------------------------------
+    2024-03-24 16:50:49,683 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 2 and Alpha: 1
+            BLEU-4 14.43    (BLEU-1: 37.14, BLEU-2: 24.73,  BLEU-3: 18.25,  BLEU-4: 14.43)
+            CHRF 36.52      ROUGE 38.32
+    2024-03-24 16:50:49,683 ------------------------------------------------------------
+    2024-03-24 16:51:06,900 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 3 and Alpha: -1
+            BLEU-4 14.52    (BLEU-1: 36.16, BLEU-2: 24.34,  BLEU-3: 18.16,  BLEU-4: 14.52)
+            CHRF 36.25      ROUGE 38.26
+    2024-03-24 16:51:06,900 ------------------------------------------------------------
+    2024-03-24 16:51:14,825 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 3 and Alpha: 1
+            BLEU-4 14.66    (BLEU-1: 36.59, BLEU-2: 24.55,  BLEU-3: 18.32,  BLEU-4: 14.66)
+            CHRF 36.61      ROUGE 38.21
+    2024-03-24 16:51:14,825 ------------------------------------------------------------
+    2024-03-24 16:52:57,447 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 6 and Alpha: 1
+            BLEU-4 14.66    (BLEU-1: 36.11, BLEU-2: 24.28,  BLEU-3: 18.20,  BLEU-4: 14.66)
+            CHRF 36.08      ROUGE 38.20
+    2024-03-24 16:52:57,448 ------------------------------------------------------------
+    2024-03-24 16:56:49,516 ************************************************************
+    2024-03-24 16:56:49,516 [DEV] partition [Recognition & Translation] results:
+            Best CTC Decode Beam Size: -1
+            Best Translation Beam Size: 6 and Alpha: 1
+            WER -1.00       (DEL: -1.00,    INS: -1.00,     SUB: -1.00)
+            BLEU-4 14.66    (BLEU-1: 36.11, BLEU-2: 24.28,  BLEU-3: 18.20,  BLEU-4: 14.66)
+            CHRF 36.08      ROUGE 38.20
+    2024-03-24 16:56:49,516 ************************************************************
+    2024-03-24 16:56:56,215 [TEST] partition [Recognition & Translation] results:
+            Best CTC Decode Beam Size: -1
+            Best Translation Beam Size: 6 and Alpha: 1
+            WER -1.00       (DEL: -1.00,    INS: -1.00,     SUB: -1.00)
+            BLEU-4 15.51    (BLEU-1: 37.56, BLEU-2: 25.59,  BLEU-3: 19.27,  BLEU-4: 15.51)
+            CHRF 37.01      ROUGE 39.01
+    2024-03-24 16:56:56,216 ************************************************************
+
+
+
+name: sign_experiment
+data:
+    data_path: ./data/pht/data/
+    version: phoenix_2014_trans
+    sgn: sign
+    txt: text
+    gls: gloss
+    train: phoenix14t.pami0.train
+    dev: phoenix14t.pami0.dev
+    test: phoenix14t.pami0.test
+    feature_size: 1624
+    level: bpe
+    sp_model_path: ./data/pht/bpe/de.wiki.bpe.vs25000.model
+    txt_lowercase: true
+    max_sent_length: 400
+    random_train_subset: -1
+    random_dev_subset: -1
+testing:
+    recognition_beam_sizes:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+    translation_beam_sizes:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+    translation_beam_alphas:
+        - -1
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+training:
+    reset_best_ckpt: false
+    reset_scheduler: false
+    reset_optimizer: false
+    random_seed: 42
+    model_dir: "./results/pht"
+    recognition_loss_weight: 0.0
+    translation_loss_weight: 1.0
+    eval_metric: bleu
+    optimizer: adam
+    learning_rate: 0.0005
+    batch_size: 32
+    num_valid_log: 5
+    epochs: 5000000
+    early_stopping_metric: eval_metric
+    batch_type: sentence
+    translation_normalization: batch
+    eval_recognition_beam_size: 1
+    eval_translation_beam_size: 10
+    eval_translation_beam_alpha: -1
+    overwrite: true
+    shuffle: true
+    use_cuda: true
+    translation_max_output_length: 40
+    keep_last_ckpts: 1
+    batch_multiplier: 1
+    logging_freq: 100
+    validation_freq: 100
+    betas:
+        - 0.9
+        - 0.998
+    scheduling: plateau
+    learning_rate_min: 1.0e-07
+    weight_decay: 0.001
+    patience: 9
+    decrease_factor: 0.5
+    label_smoothing: 0.4
+    early_stop: false
+model:
+    initializer: xavier
+    bias_initializer: zeros
+    init_gain: 1.0
+    embed_initializer: xavier
+    embed_init_gain: 1.0
+    tied_softmax: false
+    word_vectors: ./data/pht/bpe/de.wiki.bpe.vs25000.d300.w2v.txt
+    sim_name_to_video_id_json: ./data/pht/sim/name_to_video_id.json
+    sim_video_cos_sim: ./data/pht/sim/cos_sim.pkl
+    max_query_embedding: 100
+    sim_loss_weight: 10
+    sentence_embedding_mod: mean
+    encoder:
+        type: deformable_transformer
+        attentions_type: local
+        num_layers: 3
+        num_heads: 8
+        num_keys:
+            - 7
+            - 9
+            - 9
+        embeddings:
+            embedding_dim: 512
+            scale: false
+            dropout: 0.1
+            norm_type: batch
+            activation_type: softsign
+        hidden_size: 512
+        ff_size: 2048
+        dropout: 0.5
+        query_nb: 3
+        query_type: not
+    decoder:
+        type: transformer
+        num_layers: 3
+        num_heads: 8
+        embeddings:
+            embedding_dim: 300
+            scale: false
+            dropout: 0.1
+            norm_type: batch
+            activation_type: softsign
+        hidden_size: 512
+        ff_size: 2048
+        dropout: 0.5
+results
+
+    2024-03-26 04:57:20,852 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 1 and Alpha: -1
+            BLEU-4 14.31    (BLEU-1: 38.22, BLEU-2: 25.10,  BLEU-3: 18.24,  BLEU-4: 14.31)
+            CHRF 36.88      ROUGE 38.13
+    2024-03-26 04:57:20,853 ------------------------------------------------------------
+    2024-03-26 04:58:06,037 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 3 and Alpha: -1
+            BLEU-4 14.62    (BLEU-1: 37.23, BLEU-2: 25.00,  BLEU-3: 18.50,  BLEU-4: 14.62)
+            CHRF 36.37      ROUGE 38.86
+    2024-03-26 04:58:06,038 ------------------------------------------------------------
+    2024-03-26 04:58:13,689 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 3 and Alpha: 1
+            BLEU-4 14.87    (BLEU-1: 37.85, BLEU-2: 25.43,  BLEU-3: 18.81,  BLEU-4: 14.87)
+            CHRF 36.78      ROUGE 39.09
+    2024-03-26 04:58:13,690 ------------------------------------------------------------
+    2024-03-26 04:58:17,517 [DEV] partition [Translation] results:
+            New Best Translation Beam Size: 3 and Alpha: 2
+            BLEU-4 14.92    (BLEU-1: 37.89, BLEU-2: 25.47,  BLEU-3: 18.86,  BLEU-4: 14.92)
+            CHRF 36.82      ROUGE 39.00
+    2024-03-26 04:58:17,517 ------------------------------------------------------------
+    2024-03-26 05:03:36,783 ************************************************************
+    2024-03-26 05:03:36,783 [DEV] partition [Recognition & Translation] results:
+            Best CTC Decode Beam Size: -1
+            Best Translation Beam Size: 3 and Alpha: 2
+            WER -1.00       (DEL: -1.00,    INS: -1.00,     SUB: -1.00)
+            BLEU-4 14.92    (BLEU-1: 37.89, BLEU-2: 25.47,  BLEU-3: 18.86,  BLEU-4: 14.92)
+            CHRF 36.82      ROUGE 39.00
+    2024-03-26 05:03:36,783 ************************************************************
+    2024-03-26 05:03:41,224 [TEST] partition [Recognition & Translation] results:
+            Best CTC Decode Beam Size: -1
+            Best Translation Beam Size: 3 and Alpha: 2
+            WER -1.00       (DEL: -1.00,    INS: -1.00,     SUB: -1.00)
+            BLEU-4 15.12    (BLEU-1: 38.03, BLEU-2: 25.61,  BLEU-3: 19.00,  BLEU-4: 15.12)
+            CHRF 37.27      ROUGE 38.89
+    2024-03-26 05:03:41,224 ************************************************************
+
+
