@@ -1,0 +1,269 @@
+# BdSLW401: Transformer-Based Word-Level Bangla Sign Language Recognition Using Relative Quantization Encoding (RQE)
+
+[![arXiv](https://img.shields.io/badge/arXiv-2503.02360-b31b1b.svg)](https://arxiv.org/abs/2503.02360)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+
+Official implementation of **"BdSLW401: Transformer-Based Word-Level Bangla Sign Language Recognition Using Relative Quantization Encoding (RQE)"**
+
+**Authors:** Husne Ara Rubaiyeat, Njayou Youssouf, Md Kamrul Hasan, Hasan Mahmud
+
+---
+
+## 📋 Abstract
+
+Sign language recognition (SLR) for low-resource languages like Bangla faces significant challenges including signer variability, viewpoint variations, and limited annotated datasets. This repository presents:
+
+- **BdSLW401**: A large-scale, multi-view, word-level Bangla Sign Language dataset featuring 401 signs and 102,176 video samples from 18 signers captured in front and lateral views
+- **Relative Quantization Encoding (RQE)**: A novel structured embedding approach that anchors landmarks to physiological reference points and quantizes motion trajectories to improve transformer-based SLR
+
+### Key Results
+
+RQE demonstrates substantial improvements in Word Error Rate (WER) reduction:
+- **44.3%** WER reduction on WLASL100
+- **21.0%** WER reduction on SignBD-200
+- Significant performance gains on BdSLW60 and SignBD-90
+
+The approach enhances model interpretability by focusing attention on major articulatory features (fingers, wrists) and distinctive frames rather than global pose changes.
+
+---
+
+## 🎯 Motivation
+
+Current SLR systems processing raw landmark embeddings struggle with:
+- Unnecessary variations from hand dominance, body proportions, and camera angles
+- Ineffective attention allocation in transformer architectures
+- Limited generalization across signers and viewpoints
+
+**RQE addresses these challenges** by implementing a structured preprocessing step inspired by human cognitive strategies, where perception organizes sensory input before attention is applied.
+
+---
+
+## 🔬 Methodology
+
+### Relative Quantization Encoding (RQE)
+
+RQE enhances transformer attention through two key mechanisms:
+
+1. **Physiological Anchoring**: Landmarks are referenced to anatomically relevant points
+   - Fingers → anchored to wrist
+   - Torso → anchored to shoulders
+   - This reduces spatial variability and normalizes across signers
+
+2. **Motion Quantization**: MediaPipe-provided landmarks are discretized to capture essential motion patterns while filtering redundant noise
+
+### RQE-SF (Shoulder-Freezing)
+
+An extended variant that stabilizes upper body reference points to ensure pose-consistent embeddings across different signers and viewpoints, with minimal trade-offs in lateral view recognition.
+
+---
+
+## 📊 BdSLW401 Dataset
+
+### Dataset Statistics
+
+| Metric | Value |
+|--------|-------|
+| **Total Signs** | 401 |
+| **Video Samples** | 102,176 |
+| **Signers** | 18 |
+| **Views** | Front and Lateral |
+| **Recording Quality** | Multi-view synchronized |
+| **Annotation Type** | Word-level manual gesture annotations |
+
+### Benchmark Subsets
+
+- **BdSLW60**: 60-sign subset for baseline evaluation
+- Full **BdSLW401**: Complete dataset for large-scale training
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+```bash
+# Python dependencies
+python >= 3.8
+torch >= 1.10
+transformers
+mediapipe
+numpy
+opencv-python
+```
+
+### Installation
+
+```bash
+git clone https://github.com/hasanssl/RQE.git
+cd RQE
+pip install -r requirements.txt
+```
+
+### Dataset Access
+
+Instructions for accessing the BdSLW401 dataset will be provided upon publication. Please contact the authors for early access requests.
+
+---
+
+## 💻 Usage
+
+### Training with RQE
+
+```python
+# Example training script
+python train.py \
+    --dataset BdSLW401 \
+    --encoding RQE \
+    --model SLRT \
+    --epochs 100 \
+    --batch_size 32
+```
+
+### Inference
+
+```python
+# Example inference
+python inference.py \
+    --model_path checkpoints/rqe_model.pth \
+    --video_path sample_video.mp4 \
+    --encoding RQE
+```
+
+### Evaluation
+
+```python
+# Evaluate on benchmark datasets
+python evaluate.py \
+    --dataset WLASL100 \
+    --model_path checkpoints/rqe_model.pth \
+    --encoding RQE
+```
+
+---
+
+## 📈 Experimental Results
+
+### Word Error Rate (WER) Reduction
+
+| Dataset | Baseline WER | RQE WER | Improvement |
+|---------|--------------|---------|-------------|
+| WLASL100 | - | - | **44.3%** ↓ |
+| SignBD-200 | - | - | **21.0%** ↓ |
+| BdSLW60 | - | - | Significant ↑ |
+| SignBD-90 | - | - | Significant ↑ |
+
+### Attention Analysis
+
+Attention visualization demonstrates that RQE-trained models:
+- Focus more effectively on finger articulations
+- Prioritize distinctive frames
+- Reduce inconsistent attention distribution compared to raw landmark models
+
+### Limitations
+
+Performance gains diminish on ultra-large datasets (e.g., WLASL2000), indicating the need for adaptive quantization strategies in future work.
+
+---
+
+## 🏗️ Architecture
+
+The implementation builds upon the Sign Language Recognition Transformer (SLRT) architecture with RQE preprocessing:
+
+```
+Input Video → MediaPipe Landmarks → RQE Encoding → Transformer Encoder → Classification
+```
+
+### Key Components
+
+1. **Landmark Extraction**: MediaPipe Holistic for pose, hand, and face landmarks
+2. **RQE Preprocessing**: Relative positioning and quantization
+3. **Transformer Backbone**: Multi-head self-attention for temporal modeling
+4. **Classification Head**: Word-level sign prediction
+
+---
+
+## 📝 Citation
+
+If you use BdSLW401 dataset or RQE in your research, please cite:
+
+```bibtex
+@article{rubaiyeat2025bdslw401,
+  title={BdSLW401: Transformer-Based Word-Level Bangla Sign Language Recognition Using Relative Quantization Encoding (RQE)},
+  author={Rubaiyeat, Husne Ara and Youssouf, Njayou and Hasan, Md Kamrul and Mahmud, Hasan},
+  journal={arXiv preprint arXiv:2503.02360},
+  year={2025}
+}
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions to improve RQE and expand the BdSLW401 dataset. Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/improvement`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/improvement`)
+5. Create a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the GNU General Public License v2.0 - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👥 Authors & Contact
+
+- **Husne Ara Rubaiyeat**
+- **Njayou Youssouf**
+- **Md Kamrul Hasan**
+- **Hasan Mahmud** - [View email on arXiv](https://arxiv.org/abs/2503.02360)
+
+For questions, dataset access, or collaboration inquiries, please open an issue or contact the authors.
+
+---
+
+## 🙏 Acknowledgments
+
+We thank all signers who participated in the BdSLW401 dataset collection and the research community for their valuable feedback.
+
+---
+
+## 📚 Related Work
+
+This work builds upon advances in:
+- Transformer-based Sign Language Recognition
+- MediaPipe landmark extraction
+- Low-resource language processing
+- Multi-view video understanding
+
+For a comprehensive literature review, please refer to Section II of the paper.
+
+---
+
+## 🔮 Future Directions
+
+- Adaptive quantization strategies for ultra-large vocabularies
+- Real-time inference optimization
+- Cross-lingual transfer learning
+- Integration with continuous sign language recognition
+- Expansion to sentence-level recognition
+
+---
+
+## 📊 Model Zoo
+
+Pre-trained models will be released upon paper acceptance:
+
+| Model | Dataset | Encoding | Accuracy | Download |
+|-------|---------|----------|----------|----------|
+| SLRT+RQE | BdSLW60 | RQE | TBA | Coming Soon |
+| SLRT+RQE | BdSLW401 | RQE | TBA | Coming Soon |
+| SLRT+RQE-SF | BdSLW401 | RQE-SF | TBA | Coming Soon |
+
+---
+
+**⭐ Star this repository if you find it helpful!**
