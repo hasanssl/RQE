@@ -101,7 +101,7 @@ pip install -r requirements.txt
 
 ### Dataset Access
 
-Instructions for accessing the BdSLW401 dataset will be provided upon publication. Please contact the authors for early access requests.
+The dataset is publicly available and can be downloaded from https://www.kaggle.com/datasets/hasanssl/bdslw401.
 
 ---
 
@@ -111,32 +111,14 @@ Instructions for accessing the BdSLW401 dataset will be provided upon publicatio
 
 ```python
 # Example training script
-python train.py \
-    --dataset BdSLW401 \
-    --encoding RQE \
-    --model SLRT \
-    --epochs 100 \
-    --batch_size 32
+ppython3 -m signjoey train configs/sign.yaml
 ```
 
 ### Inference
 
 ```python
 # Example inference
-python inference.py \
-    --model_path checkpoints/rqe_model.pth \
-    --video_path sample_video.mp4 \
-    --encoding RQE
-```
-
-### Evaluation
-
-```python
-# Evaluate on benchmark datasets
-python evaluate.py \
-    --dataset WLASL100 \
-    --model_path checkpoints/rqe_model.pth \
-    --encoding RQE
+python3 -m signjoey test configs/sign.yaml
 ```
 
 ---
@@ -145,12 +127,14 @@ python evaluate.py \
 
 ### Word Error Rate (WER) Reduction
 
-| Dataset | Baseline WER | RQE WER | Improvement |
+| Dataset | Baseline WER | RQE WER | RQE-SF WER(%) |
 |---------|--------------|---------|-------------|
-| WLASL100 | - | - | **44.3%** ↓ |
-| SignBD-200 | - | - | **21.0%** ↓ |
-| BdSLW60 | - | - | Significant ↑ |
-| SignBD-90 | - | - | Significant ↑ |
+| SignBD-90 | 33.33  | 29.63 |  25.37 |
+| SignBD-200  | 43.67 |  34.50 |  33.42 |
+| WLASL100 |  50.78 |  28.29 | Significant ↑ |
+| WLASL300 |  52.10 |  48.65  | - |
+| WLASL1000 |  59.75 |  59.06 - | -|
+| WLASL2000 |  68.49  | 69.18  | - |
 
 ### Attention Analysis
 
@@ -254,6 +238,7 @@ For a comprehensive literature review, please refer to Section II of the paper.
 - Expansion to sentence-level recognition
 
 ---
+
 
 
 **⭐ Star this repository if you find it helpful!**
