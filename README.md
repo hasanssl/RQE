@@ -8,6 +8,11 @@ Official implementation of **"BdSLW401: Transformer-Based Word-Level Bangla Sign
 **Authors:** Husne Ara Rubaiyeat, Njayou Youssouf, Md Kamrul Hasan, Hasan Mahmud
 
 ---
+<p align="center">
+  <img src="https://github.com/hasanssl/RQE/rqe.png" alt="RQE Visualization" width="100%">
+  <br>
+  <em>Figure 2: RQE for a referenced frame. From left to right: Holistic landmarks of the referenced frame, RQE level for front view and RQE level for lateral view</em>
+</p>
 
 ## 📋 Abstract
 
